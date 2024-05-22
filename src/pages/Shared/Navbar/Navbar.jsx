@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
+import { FaCartShopping } from "react-icons/fa6";
+import useCart from "../../../hooks/useCart";
 
 
 const Navbar = () => {
-    const { user , logOut} = useAuth();
-    console.log(user, logOut)
+    const { user, logOut } = useAuth();
+    // console.log(user, logOut);
+    const [cart] = useCart();
 
     const handleLogOut = () => {
         logOut()
@@ -13,14 +16,27 @@ const Navbar = () => {
             })
             .catch(error => console.log('Error during logout:', error));
     }
-    
+
     const navoptins = <>
         <li><Link to={'/'}>Home</Link></li>
         <li><Link to={'/menu'}>Our Menu</Link></li>
         <li><Link to={'/order/salad'}>Order Menu</Link></li>
         <li><Link to={'/secret'}>Secret</Link></li>
+        <li>
+            <Link to={'/dashboard/carts'}>
+                <button className="btn btn-xs">
+                    <FaCartShopping />
+                    <div className="badge badge-secondary">+{cart.length}</div>
+                </button>
+            </Link>
+        </li>
         {
-            user ? <li><button onClick={handleLogOut} className="btn btn-ghost btn-sm">Sign Out</button></li> : <li><Link to={'/login'}>Login</Link></li>
+            user ?
+                <>
+                    <li><button onClick={handleLogOut} className="btn btn-ghost btn-sm">Sign Out</button></li>
+                </> : <>
+                    <li><Link to={'/login'}>Login</Link></li>
+                </>
         }
     </>
     return (
