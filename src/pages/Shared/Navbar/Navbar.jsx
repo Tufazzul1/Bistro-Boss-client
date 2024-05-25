@@ -12,7 +12,7 @@ const Navbar = () => {
     const handleLogOut = () => {
         logOut()
             .then(() => {
-                console.log('Logged out successfully');
+                // console.log('Logged out successfully');
             })
             .catch(error => console.log('Error during logout:', error));
     }

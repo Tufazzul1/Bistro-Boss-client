@@ -4,37 +4,49 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 
 const SignUp = () => {
-    const navigate = useNavigate()
-
+    const axiosPublic = useAxiosPublic();
+    const navigate = useNavigate();
     const {
         register,
         reset,
         handleSubmit,
         formState: { errors },
     } = useForm();
-
-    const { createUser , updateUserProfile} = useAuth();
+    const { createUser, updateUserProfile } = useAuth();
 
     const onSubmit = (data) => {
         console.log(data)
         createUser(data.email, data.password)
             .then(result => {
                 const user = result.user;
-                console.log(user)
                 updateUserProfile(data.name, data.photoURL)
-                .then(() =>{
-                    console.log('user Profile Updated')
-                    reset();
-                })
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Register successfully',
-                    icon: 'seccess',
-                    confirmButtonText: 'ok'
-                });
+                    .then(() => {
+                        // create user entry inthe database
+                        const userInfo = {
+                            name: data.name,
+                            email: data.email
+                        }
+                        axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                if (res.data.insertedId > 0) {
+                                    console.log('user added to the database successfully')
+                                    reset();
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: 'Register successfully',
+                                        icon: 'seccess',
+                                        confirmButtonText: 'ok'
+                                    });
+                                }
+                            })
+
+                    })
+
                 navigate('/');
             })
     }
@@ -110,11 +122,12 @@ const SignUp = () => {
                             </div>
 
                             <div className="form-control mt-6">
-
                                 <input className="btn btn-primary" type="submit" value="Sign Up" />
                             </div>
                         </form>
+                        <SocialLogin></SocialLogin>
                         <p className='text-yellow-600 text-center'><small>All Ready Registered ? <Link className='font-bold' to={'/login'}>Go to Login</Link></small></p>
+
                     </div>
                 </div>
             </div>

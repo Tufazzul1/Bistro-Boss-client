@@ -23,7 +23,6 @@ const Testimonial = () => {
             })
     }, []);
 
-    console.log(reviews)
     return (
         <section className="my-20">
             <SectionTitle
