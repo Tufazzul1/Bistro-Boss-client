@@ -3,13 +3,14 @@ import { FaCalendar, FaList } from "react-icons/fa6";
 import { MdRateReview } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
 import useCart from "../hooks/useCart";
+import useAdmin from "../hooks/useAdmin";
 
 
 const DashBoard = () => {
     const [cart] = useCart();
 
     // ToDo : get is admin value from the database
-    const isAdmin = true;
+    const [isAdmin] = useAdmin();
     return (
         // side bar
         <div className="flex ">
@@ -61,7 +62,7 @@ const DashBoard = () => {
                                         Reservation</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={'/dashboard/cart'}>
+                                    <NavLink to={'/dashboard/carts'}>
                                         <FaShoppingCart></FaShoppingCart>
                                         My Cart ({cart.length})</NavLink>
                                 </li>

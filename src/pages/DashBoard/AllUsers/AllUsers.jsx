@@ -8,7 +8,7 @@ import useAuth from "../../../hooks/useAuth";
 
 const AllUsers = () => {
     const axiosSecure = useAxiosSecure();
-
+    const { user } = useAuth();
     const { data: users = [], refetch } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
